@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import "./style.css";
 
@@ -8,8 +9,7 @@ function CreateNote(props) {
   });
 
   const inputChange = (e) => {
-    const value = e.target.value;
-    const name = e.target.name;
+    const { name, value } = e.target;
 
     setNote((prevData) => {
       return {
@@ -22,18 +22,31 @@ function CreateNote(props) {
 
   const addEvent = (e) => {
     e.preventDefault();
-
-    props.passNote(note);
-
-    setNote({
-      title: "",
-      content: "",
-    });
+    console.log(note.content);
+    axios
+      .post("http://localhost:3001/api/insert", {
+        title: note.title,
+        content: note.content,
+      })
+      .then((res) => {
+        console.log(res);
+        alert("done bro");
+        props.passNote(note);
+        setNote({
+          title: "",
+          content: "",
+        });
+      })
+      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.error(err);
+        alert("Error adding note");
+      });
   };
 
   return (
     <div className="createNotes-container">
-      <form>
+      <form onSubmit={addEvent}>
         <input
           type="text"
           name="title"
@@ -50,7 +63,7 @@ function CreateNote(props) {
             name="content"
             value={note.content}
             onChange={inputChange}
-            column="5"
+            cols="5"
             placeholder="Take a note..."
             className="textarea"
             style={{
@@ -61,8 +74,8 @@ function CreateNote(props) {
             }}
           />
           <button
-            disabled={!note.title}
-            onClick={addEvent}
+            disabled={!note.title || !note.content}
+            type="submit"
             className="button-style"
           >
             +
