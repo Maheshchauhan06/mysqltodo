@@ -7,7 +7,7 @@ const cors = require("cors");
 const db = mysql.createPool({
   host: "127.0.0.1",
   user: "root",
-  password: "mchauhan66@gmail",
+  password: "mchuahan66@gmail",
   database: "todoapp",
 });
 
@@ -42,7 +42,7 @@ app.post("/api/insert", (req, res) => {
   const title = req.body.title;
   const value = req.body.content;
   console.log(value);
-  const sqlInsert = "INSERT INTO todoapp (title, input) VALUES (?,?)";
+  const sqlInsert = "INSERT INTO todoapp (title, content) VALUES (?,?)";
   db.query(sqlInsert, [title, value], (err, result) => {
     if (err) {
       console.log(err);
