@@ -16,6 +16,20 @@ app.use(express.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.delete("/api/delete/:id", (req, res) => {
+  const id = req.params.id;
+  const sqldelete = "DELETE FROM todoapp WHERE id = ?";
+  db.query(sqldelete, id, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error deleting task");
+    } else {
+      console.log(result);
+      res.status(200).send("Task deleted successfully");
+    }
+  });
+});
+
 app.get("/api/get", (req, res) => {
   const sqlselect = "SELECT * FROM todoapp";
   db.query(sqlselect, (err, result) => {

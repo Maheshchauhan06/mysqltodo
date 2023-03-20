@@ -1,9 +1,11 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
+import axios from "axios";
 
 function Notes(props) {
   const deleteNotes = () => {
-    props.deleteItem(props.id);
+    axios.delete(`http://localhost:3001/api/delete/${props.id}`);
+    props.setrefresh(props.refresh + 1);
   };
 
   return (

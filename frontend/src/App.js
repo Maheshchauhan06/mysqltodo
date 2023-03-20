@@ -3,40 +3,33 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./Component/Header";
 import CreateNote from "./Component/CreateNote";
 import Notes from "./Component/Notes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
   const [addNotes, setAddNotes] = useState([]);
+  const [refresh, setrefresh] = useState(0);
 
-  const addNote = (note) => {
-    setAddNotes((prevData) => {
-      return [...prevData, note];
-    });
-
-    console.log(note);
-  };
-
-  const onDelete = (id) => {
-    setAddNotes((oldData) =>
-      oldData.filter((ele, indx) => {
-        return id !== indx;
-      })
-    );
-  };
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/get")
+      .then((res) => setAddNotes(res.data));
+    console.log(refresh);
+  }, [refresh]);
 
   return (
     <div className="todocontainer">
       <Header />
-      <CreateNote passNote={addNote} />
+      <CreateNote setrefresh={setrefresh} refresh={refresh} />
       <div className="notesbox">
-        {addNotes.map((ele, indx) => {
+        {addNotes.map((ele) => {
           return (
             <Notes
-              key={indx}
-              id={indx}
+              setrefresh={setrefresh}
+              refresh={refresh}
+              id={ele.id}
               title={ele.title}
-              content={ele.content}
-              deleteItem={onDelete}
+              content={ele.input}
             />
           );
         })}

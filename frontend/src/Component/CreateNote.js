@@ -10,14 +10,12 @@ function CreateNote(props) {
 
   const inputChange = (e) => {
     const { name, value } = e.target;
-
     setNote((prevData) => {
       return {
         ...prevData,
         [name]: value,
       };
     });
-    console.log(note);
   };
 
   const addEvent = (e) => {
@@ -29,9 +27,6 @@ function CreateNote(props) {
         content: note.content,
       })
       .then((res) => {
-        console.log(res);
-        alert("done bro");
-        props.passNote(note);
         setNote({
           title: "",
           content: "",
@@ -42,6 +37,7 @@ function CreateNote(props) {
         console.error(err);
         alert("Error adding note");
       });
+    props.setrefresh(props.refresh + 1);
   };
 
   return (
